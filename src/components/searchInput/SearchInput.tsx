@@ -5,7 +5,7 @@ import { Container, TextField } from "@mui/material";
 import { SEARCH_INPUT_LABELS } from "./Labels";
 
 export const SearchInput = () => {
-  const [inputValue, setInputValue] = useState<string>();
+  const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setInputValue(e.target.value.replace(/[^0-9]/g, ""));
