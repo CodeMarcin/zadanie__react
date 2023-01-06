@@ -5,14 +5,20 @@ import { getData, getDataFromAPI } from "./store/dataSlice";
 import { useAppDispatch } from "./store/store.hooks";
 
 import { SearchInput } from "./components/searchInput/SearchInput";
+import { Pagination } from "./components/pagination/Pagination";
 
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 
 import { SVGLoader } from "./utilities/SVG";
 
 export const App = () => {
   const selector = useSelector(getData);
   const dispatch = useAppDispatch();
+  const { page, total_pages } = selector.fromApi;
+
+  const handleChangePagination = (e: React.ChangeEvent<unknown>, value: number) => {
+    dispatch(getDataFromAPI({ page: value }));
+  };
 
   useEffect(() => {
     dispatch(getDataFromAPI({ page: 1 }));
@@ -25,7 +31,7 @@ export const App = () => {
         <SVGLoader />
       ) : (
         <>
-          <TableContainer component={Paper}>
+          <TableContainer>
             <Table sx={{ minWidth: 650 }}>
               <TableHead>
                 <TableRow>
@@ -47,6 +53,7 @@ export const App = () => {
           </TableContainer>
         </>
       )}
+      <Pagination count={total_pages} page={page} handleCangePagination={(e, value) => handleChangePagination(e, value)} />
     </>
   );
 };
