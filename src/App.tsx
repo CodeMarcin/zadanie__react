@@ -1,37 +1,52 @@
-import { useState, useEffect, useCallback } from "react";
+import { useEffect } from "react";
+
+import { useSelector } from "react-redux";
+import { getData, getDataFromAPI } from "./store/dataSlice";
+import { useAppDispatch } from "./store/store.hooks";
 
 import { SearchInput } from "./components/searchInput/SearchInput";
 
-import { getBasicDataAPI } from "./api/getBasicDataAPI";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 
 import { SVGLoader } from "./utilities/SVG";
 
 export const App = () => {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const getDataFromAPI = useCallback(async (page: number, perPage?: number) => {
-    try {
-      setIsLoading(true);
-      const all = await getBasicDataAPI(page, perPage);
-      const { data } = await await getBasicDataAPI(page, perPage);
-
-      console.log(all);
-      setIsLoading(false);
-    } catch (error) {
-
-      console.log("jest error");
-      console.error(error, "ERROR");
-    }
-  }, []);
+  const selector = useSelector(getData);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    getDataFromAPI(1);
-  }, [getDataFromAPI]);
-  
+    dispatch(getDataFromAPI({ page: 1 }));
+  }, []);
+
   return (
     <>
       <SearchInput />
-      {!isLoading && <SVGLoader />}
+      {selector.isLoading ? (
+        <SVGLoader />
+      ) : (
+        <>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Year</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {selector.fromApi.data.map((el) => (
+                  <TableRow key={el.id} sx={{ backgroundColor: `${el.color}` }}>
+                    <TableCell>{el.id}</TableCell>
+                    <TableCell>{el.name}</TableCell>
+                    <TableCell>{el.year}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </>
+      )}
     </>
   );
 };
