@@ -13,7 +13,14 @@ export const SearchInput = () => {
 
   return (
     <Container>
-      <TextField label={SEARCH_INPUT_LABELS.SEARCH_INPUT_LABEL} value={inputValue} variant="standard" fullWidth onChange={handleInputChange} />
+      <TextField
+        sx={{ borderBottom: "2px solid #000" }}
+        label={SEARCH_INPUT_LABELS.SEARCH_INPUT_LABEL}
+        value={inputValue}
+        variant="standard"
+        fullWidth
+        onChange={handleInputChange}
+      />
     </Container>
   );
 };
