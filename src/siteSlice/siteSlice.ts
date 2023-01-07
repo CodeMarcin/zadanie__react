@@ -68,7 +68,6 @@ export const siteSlice = createSlice({
       };
     });
     builder.addCase(fetchAndParseItemByID.rejected, (state, action) => {
-      console.log(action, "ERROR");
       return { ...state, items: [], site: { ...state.site, isLoadingData: false, message: action.error.code !== "ERR_BAD_REQUEST" ? action.error.message! : null } };
     });
   },
