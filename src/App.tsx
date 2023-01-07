@@ -2,13 +2,14 @@ import { useState, useEffect, useCallback } from "react";
 
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 
-import { fetchAndParseAllData, fetchAndParseItemByID } from "./siteSlice/siteSlice";
+import { fetchAndParseAllData, fetchAndParseItemByID, setShowModalItemID } from "./siteSlice/siteSlice";
 
 import { Container } from "@mui/system";
 
 import { SearchInput } from "./components/searchInput/SearchInput";
 import { ResultTable } from "./components/resultTable/ResultTable";
 import { Pagination } from "./components/pagination/Pagination";
+import { ItemModal } from "./components/itemModal/ItemModal";
 import { Typography } from "@mui/material";
 
 const SEARCH_PARAMS = new URLSearchParams(document.location.search);
@@ -64,8 +65,11 @@ export const App = () => {
     }
   };
 
+  const handleCloseModal = () => {
+    dispatch(setShowModalItemID(0));
+  };
+
   useEffect(() => {
-    console.log('useeffe')
     const URLParams = getURLParams();
     if (Object.keys(URLParams).length)
       if (URLParams.param === EXPECTED_URL_PARAMS_PAGE) dispatch(fetchAndParseAllData({ page: parseInt(URLParams?.value!) }));
@@ -83,6 +87,9 @@ export const App = () => {
       {isFullyRendered && <SearchInput handleSearchInput={handleSearchInput} idFromURLAfterLoadSite={idFromURLAfterLoadSite} />}
       <ResultTable isDataLoading={site.isLoadingData} items={items} message={site.message} />
       {items.length > 1 && <Pagination count={pagination.total_pages} page={pagination.page} handleChangePagination={(e, value) => handleChangePagination(e, value)} />}
+      {!!site.showModalItemID && (
+        <ItemModal open={!!site.showModalItemID} handleCloseModal={handleCloseModal} data={items.find((el) => el.id === site.showModalItemID)!}></ItemModal>
+      )}
       {/* TO DO: Add Showing example: 5 of 12  */}
     </Container>
   );
