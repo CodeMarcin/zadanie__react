@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Container, TextField } from "@mui/material";
 
@@ -6,17 +6,25 @@ import { SEARCH_INPUT_LABELS } from "./Labels";
 import { Box } from "@mui/system";
 
 interface ISearchInput {
+  idFromURLAfterLoadSite: string | undefined;
   handleSearchInput(e: string): void;
 }
 
-export const SearchInput = ({ handleSearchInput }: ISearchInput) => {
+const onlyNumber = (value: string) => value.replace(/[^0-9]/g, "");
+
+export const SearchInput = ({ idFromURLAfterLoadSite, handleSearchInput }: ISearchInput) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
-    setInputValue(onlyNumber);
-    handleSearchInput(onlyNumber);
+    const onlyNumberValue = onlyNumber(e.target.value);
+
+    setInputValue(onlyNumber(onlyNumberValue));
+    handleSearchInput(onlyNumber(onlyNumberValue));
   };
+
+  useEffect(() => {
+    if (idFromURLAfterLoadSite) setInputValue(onlyNumber(idFromURLAfterLoadSite));
+  }, [idFromURLAfterLoadSite]);
 
   return (
     <Box>
