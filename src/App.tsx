@@ -1,59 +1,51 @@
-import { useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-import { useSelector } from "react-redux";
-import { getData, getDataFromAPI } from "./store/dataSlice";
-import { useAppDispatch } from "./store/store.hooks";
+import { useAppDispatch, useAppSelector } from "./store/hooks";
+
+import { fetchAndParseAllData, fetchAndParseItemByID } from "./siteSlice/siteSlice";
+
+import { Container } from "@mui/system";
 
 import { SearchInput } from "./components/searchInput/SearchInput";
+import { ResultTable } from "./components/resultTable/ResultTable";
 import { Pagination } from "./components/pagination/Pagination";
-
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-
-import { SVGLoader } from "./utilities/SVG";
+import { Typography } from "@mui/material";
 
 export const App = () => {
-  const selector = useSelector(getData);
+  const selector = useAppSelector((state) => state.site);
+  const { items, pagination, site } = selector;
   const dispatch = useAppDispatch();
-  const { page, total_pages } = selector.fromApi;
+
+  const initializeDefaultData = () => {
+    dispatch(
+      fetchAndParseAllData({
+        page: 1,
+      })
+    );
+  };
 
   const handleChangePagination = (e: React.ChangeEvent<unknown>, value: number) => {
-    dispatch(getDataFromAPI({ page: value }));
+    dispatch(fetchAndParseAllData({ page: value }));
+  };
+
+  const handleSearchInput = (value: string) => {
+    if (!value) initializeDefaultData();
+    else dispatch(fetchAndParseItemByID(value));
   };
 
   useEffect(() => {
-    dispatch(getDataFromAPI({ page: 1 }));
+    initializeDefaultData();
+    console.log(selector, "SELECTOR");
   }, []);
 
   return (
-    <>
-      <SearchInput />
-      {selector.isLoading ? (
-        <SVGLoader />
-      ) : (
-        <>
-          <TableContainer>
-            <Table sx={{ minWidth: 650 }}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Year</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {selector.fromApi.data.map((el) => (
-                  <TableRow key={el.id} sx={{ backgroundColor: `${el.color}` }}>
-                    <TableCell>{el.id}</TableCell>
-                    <TableCell>{el.name}</TableCell>
-                    <TableCell>{el.year}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </>
+    <Container maxWidth="lg">
+      <SearchInput handleSearchInput={handleSearchInput} />
+      <ResultTable isDataLoading={site.isLoadingData} items={items} message={site.message} />
+      {pagination.total_pages > 1 && (
+        <Pagination count={pagination.total_pages} page={pagination.page} handleChangePagination={(e, value) => handleChangePagination(e, value)} />
       )}
-      <Pagination count={total_pages} page={page} handleCangePagination={(e, value) => handleChangePagination(e, value)} />
-    </>
+      {/* TO DO: Add Showing example: 5 of 12  */}
+    </Container>
   );
 };

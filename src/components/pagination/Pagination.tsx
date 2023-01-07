@@ -8,14 +8,14 @@ import { PAGINATION_LABELS } from "./Labels";
 interface IPagination {
   count: number;
   page: number;
-  handleCangePagination(e: React.ChangeEvent<unknown>, value: number): void;
+  handleChangePagination(e: React.ChangeEvent<unknown>, value: number): void;
 }
 
-export const Pagination = ({ count, page, handleCangePagination }: IPagination) => {
+export const Pagination = ({ count, page, handleChangePagination }: IPagination) => {
   const { items } = usePagination({
     count,
     page,
-    onChange: (e, page) => handleCangePagination(e, page),
+    onChange: (e, page) => handleChangePagination(e, page),
   });
   return (
     <Box
