@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import dataSlice from "./dataSlice";
+
+import siteSlice from "../siteSlice/siteSlice";
 
 export const store = configureStore({
   reducer: {
-    dataSlice,
+    site: siteSlice,
   },
 });
 
