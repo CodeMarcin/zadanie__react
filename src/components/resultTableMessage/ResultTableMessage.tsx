@@ -1,6 +1,6 @@
 import { Alert, TableCell, TableRow } from "@mui/material";
 
-type TMessageType = "ERRO" | "MESSAGE";
+type TMessageType = "ERROR" | "MESSAGE";
 
 interface IResultTableMessage {
   type: TMessageType;
@@ -8,17 +8,13 @@ interface IResultTableMessage {
 }
 
 export const ResultTableMessage = ({ type, message }: IResultTableMessage) => {
-  if (type === "MESSAGE") {
-    return (
-      <TableRow>
-        <TableCell colSpan={3}>
-          <Alert variant="filled" severity="info">
-            {message}
-          </Alert>
-        </TableCell>
-      </TableRow>
-    );
-  }
-
-  return <div>ResultTableMessage</div>;
+  return (
+    <TableRow>
+      <TableCell colSpan={3}>
+        <Alert variant="filled" severity={type === "MESSAGE" ? "info" : "error"}>
+          {message}
+        </Alert>
+      </TableCell>
+    </TableRow>
+  );
 };

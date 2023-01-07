@@ -1,6 +1,7 @@
-import { Alert, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { Box } from "@mui/system";
+import { Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 
+import { Box } from "@mui/system";
+import { styled } from "@mui/material/styles";
 import { ResultTableItem } from "../resultTableItem/ResultTableItem";
 import { ResultTableLoader } from "../resultTableLoader/ResultTableLoader";
 import { ResultTableMessage } from "../resultTableMessage/ResultTableMessage";
@@ -13,33 +14,38 @@ interface IResultTable {
   message: string | null;
 }
 
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    fontWeight: "bold",
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
 export const ResultTable = ({ isDataLoading, items, message }: IResultTable) => {
+
+  const getContent = () => {
+    if (isDataLoading) return <ResultTableLoader />;
+    else if (items.length) return items.map((el) => <ResultTableItem key={el.id} id={el.id} color={el.color} name={el.name} year={el.year} />);
+    else if (!items.length && !message) return <ResultTableMessage type="MESSAGE" message={RESULT_TABLE_LABELS.NO_DATA_TO_DISPLAY} />;
+    else return <ResultTableMessage type="ERROR" message={message ?? ""} />;
+  };
+
   return (
     <Box>
-      <TableContainer sx={{ minHeight: "322px" }}>
+      <TableContainer sx={{ minHeight: "322px" }} component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>{RESULT_TABLE_LABELS.ID}</TableCell>
-              <TableCell>{RESULT_TABLE_LABELS.NAME}</TableCell>
-              <TableCell>{RESULT_TABLE_LABELS.YEAR}</TableCell>
+              <StyledTableCell>{RESULT_TABLE_LABELS.ID}</StyledTableCell>
+              <StyledTableCell>{RESULT_TABLE_LABELS.NAME}</StyledTableCell>
+              <StyledTableCell>{RESULT_TABLE_LABELS.YEAR}</StyledTableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {isDataLoading ? (
-              <ResultTableLoader />
-            ) : items.length ? (
-              items.map((el) => <ResultTableItem key={el.id} id={el.id} color={el.color} name={el.name} year={el.year} />)
-            ) : (
-              <TableRow>
-                <TableCell colSpan={3}>
-                  <Alert variant="filled" severity="info">
-                    {RESULT_TABLE_LABELS.NO_DATA_TO_DISPLAY}
-                  </Alert>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+          <TableBody>{getContent()}</TableBody>
         </Table>
       </TableContainer>
     </Box>

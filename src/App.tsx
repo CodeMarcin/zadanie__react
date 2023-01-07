@@ -16,13 +16,9 @@ export const App = () => {
   const { items, pagination, site } = selector;
   const dispatch = useAppDispatch();
 
-  const initializeDefaultData = () => {
-    dispatch(
-      fetchAndParseAllData({
-        page: 1,
-      })
-    );
-  };
+  const initializeDefaultData = useCallback(() => {
+    dispatch(fetchAndParseAllData({ page: 1 }));
+  }, [dispatch]);
 
   const handleChangePagination = (e: React.ChangeEvent<unknown>, value: number) => {
     dispatch(fetchAndParseAllData({ page: value }));
@@ -35,8 +31,7 @@ export const App = () => {
 
   useEffect(() => {
     initializeDefaultData();
-    console.log(selector, "SELECTOR");
-  }, []);
+  }, [initializeDefaultData]);
 
   return (
     <Container maxWidth="lg">
