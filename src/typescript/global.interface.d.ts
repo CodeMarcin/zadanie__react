@@ -20,7 +20,7 @@ declare global {
   }
   interface ISiteSettings {
     isLoadingData: boolean;
-    showModal: boolean
-    message: string | null ;
+    showModalItemID?: number;
+    message: string | null;
   }
 }

@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
 import { getBasicDataAPI, getProductByIdAPI } from "../api/getDataApi";
+import { RootState } from "../store/store";
 
 export const fetchAndParseAllData = createAsyncThunk("getDataFromAPI", async ({ page, perPage }: { page: number; perPage?: number }) => {
   try {
@@ -21,7 +22,6 @@ const initialState: ISite = {
   site: {
     isLoadingData: false,
     message: null,
-    showModal: false,
   },
   items: [],
   pagination: {
@@ -36,9 +36,12 @@ export const siteSlice = createSlice({
   name: "site",
   initialState,
   reducers: {
-    addItems: (state, action: PayloadAction<IItem[]>) => {
-      return { ...state };
+    setShowModalItemID: (state, action: PayloadAction<number>) => {
+      state.site.showModalItemID = action.payload;
     },
+    // getSpeciyItemData: (state, action: PayloadAction<number>) => {
+    //   return state.items.find((el) => el.id === action.payload);
+    // },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAndParseAllData.pending, (state) => {
@@ -73,6 +76,6 @@ export const siteSlice = createSlice({
   },
 });
 
-// export const { addItems } = siteSlice.actions;
+export const { setShowModalItemID } = siteSlice.actions;
 
 export default siteSlice.reducer;

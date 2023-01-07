@@ -1,3 +1,6 @@
+import { useAppDispatch } from "../../store/hooks";
+import { setShowModalItemID } from "../../siteSlice/siteSlice";
+
 import { TableCell, TableRow } from "@mui/material";
 
 interface IResultTableItem {
@@ -8,8 +11,12 @@ interface IResultTableItem {
 }
 
 export const ResultTableItem = ({ id, color, name, year }: IResultTableItem) => {
+  const dispatch = useAppDispatch();
+  const handleClickItem = () => {
+    dispatch(setShowModalItemID(id));
+  };
   return (
-    <TableRow sx={{ backgroundColor: `${color}` }}>
+    <TableRow onClick={handleClickItem} sx={{ backgroundColor: `${color}` }}>
       <TableCell>{id}</TableCell>
       <TableCell>{name}</TableCell>
       <TableCell>{year}</TableCell>
