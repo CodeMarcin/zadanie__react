@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 
@@ -63,15 +63,18 @@ export const App = () => {
     dispatch(fetchAndParseAllData({ page: value }));
   };
 
-  const handleSearchInput = (value: string) => {
-    if (!value) {
-      replaceURL();
-      initializeDefaultData();
-    } else {
-      replaceURL("id", value);
-      dispatch(fetchAndParseItemByID(value));
-    }
-  };
+  const handleSearchInput = useCallback(
+    (value: string) => {
+      if (!value) {
+        replaceURL();
+        initializeDefaultData();
+      } else {
+        replaceURL("id", value);
+        dispatch(fetchAndParseItemByID(value));
+      }
+    },
+    [dispatch, initializeDefaultData]
+  );
 
   const handleCloseModal = () => {
     dispatch(setShowModalItemID(0));

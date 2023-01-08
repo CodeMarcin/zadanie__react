@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useDeferredValue, useCallback } from "react";
 
 import { Grid, Paper, InputBase } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -22,17 +22,21 @@ export const StyledPaperSearchInput = styled(Paper)(() => ({
 
 export const SearchInput = ({ idFromURLAfterLoadSite, handleSearchInput }: ISearchInput) => {
   const [inputValue, setInputValue] = useState("");
+  const defferedInputValue = useDeferredValue(inputValue);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const onlyNumberValue = onlyNumber(e.target.value);
 
-    setInputValue(onlyNumber(onlyNumberValue));
-    handleSearchInput(onlyNumber(onlyNumberValue));
+    setInputValue(onlyNumberValue);
   };
 
   useEffect(() => {
     if (idFromURLAfterLoadSite) setInputValue(onlyNumber(idFromURLAfterLoadSite));
   }, [idFromURLAfterLoadSite]);
+
+  useEffect(() => {
+    handleSearchInput(defferedInputValue);
+  }, [defferedInputValue, handleSearchInput]);
 
   return (
     <Grid item>
