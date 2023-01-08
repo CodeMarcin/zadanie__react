@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
-import { StyledPaperSearchInput } from "./Styles";
-import { Grid } from "@mui/material";
+
+import { Grid, Paper, InputBase } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import SearchIcon from "@mui/icons-material/Search";
 
 import { SEARCH_INPUT_LABELS } from "./Labels";
-
-import { Paper } from "@mui/material";
-
-import { InputBase } from "@mui/material";
 
 interface ISearchInput {
   idFromURLAfterLoadSite: string | undefined;
@@ -16,6 +13,12 @@ interface ISearchInput {
 }
 
 const onlyNumber = (value: string) => value.replace(/[^0-9]/g, "");
+
+export const StyledPaperSearchInput = styled(Paper)(() => ({
+  padding: "5px",
+  display: "flex",
+  alignItems: "center",
+}));
 
 export const SearchInput = ({ idFromURLAfterLoadSite, handleSearchInput }: ISearchInput) => {
   const [inputValue, setInputValue] = useState("");
@@ -33,9 +36,9 @@ export const SearchInput = ({ idFromURLAfterLoadSite, handleSearchInput }: ISear
 
   return (
     <Grid item>
-      <StyledPaperSearchInput >
+      <StyledPaperSearchInput>
         <SearchIcon />
-        <InputBase sx={{ ml: 1, flex: 1 }} placeholder={SEARCH_INPUT_LABELS.SEARCH_INPUT_LABEL} value={inputValue} onChange={handleInputChange} />
+        <InputBase fullWidth placeholder={SEARCH_INPUT_LABELS.SEARCH_INPUT_LABEL} value={inputValue} onChange={handleInputChange} />
       </StyledPaperSearchInput>
     </Grid>
   );

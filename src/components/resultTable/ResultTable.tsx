@@ -1,9 +1,10 @@
-import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-
-import { styled } from "@mui/material/styles";
 import { ResultTableItem } from "../resultTableItem/ResultTableItem";
 import { ResultTableLoader } from "../resultTableLoader/ResultTableLoader";
 import { ResultTableMessage } from "../resultTableMessage/ResultTableMessage";
+
+import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+
+import { styled } from "@mui/material/styles";
 
 import { RESULT_TABLE_LABELS } from "./Labels";
 
@@ -12,6 +13,10 @@ interface IResultTable {
   items: IItem[];
   message: string | null;
 }
+
+const StyledGrid = styled(Grid)(() => ({
+  padding: "0 25px",
+}));
 
 const StyledTable = styled(Table)(() => ({
   borderCollapse: "unset",
@@ -31,11 +36,11 @@ export const ResultTable = ({ isDataLoading, items, message }: IResultTable) => 
     if (isDataLoading) return <ResultTableLoader />;
     else if (items.length) return items.map((el) => <ResultTableItem key={el.id} id={el.id} color={el.color} name={el.name} year={el.year} />);
     else if (!items.length && !message) return <ResultTableMessage type="MESSAGE" message={RESULT_TABLE_LABELS.NO_DATA_TO_DISPLAY} />;
-    else return <ResultTableMessage type="ERROR" message={message ?? ""} />;
+    else return <ResultTableMessage type="ERROR" message={message ?? null} />;
   };
 
   return (
-    <Grid item sx={{ padding: "0 25px" }}>
+    <StyledGrid item>
       <TableContainer>
         <StyledTable>
           <TableHead>
@@ -48,6 +53,6 @@ export const ResultTable = ({ isDataLoading, items, message }: IResultTable) => 
           <TableBody>{getContent()}</TableBody>
         </StyledTable>
       </TableContainer>
-    </Grid>
+    </StyledGrid>
   );
 };

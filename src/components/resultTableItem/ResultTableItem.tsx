@@ -1,6 +1,8 @@
-import { useRef, useCallback, useEffect } from "react";
 import { useAppDispatch } from "../../store/hooks";
+
 import { setShowModalItemID } from "../../siteSlice/siteSlice";
+
+import { useFirstLetterToUppercase } from "../../hooks/useFirstLetterToUppercase";
 
 import { TableCell, TableRow } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -36,7 +38,7 @@ export const ResultTableItem = ({ id, color, name, year }: IResultTableItem) => 
   return (
     <StyledTableRow onClick={() => dispatch(setShowModalItemID(id))} tabIndex={0}>
       <StyledTableCell>{id}</StyledTableCell>
-      <StyledTableCell>{name[0].toUpperCase() + name.substring(1)}</StyledTableCell>
+      <StyledTableCell>{useFirstLetterToUppercase(name)}</StyledTableCell>
       <StyledTableCell>{year}</StyledTableCell>
     </StyledTableRow>
   );
