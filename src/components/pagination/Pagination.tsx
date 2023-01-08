@@ -3,6 +3,8 @@ import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutl
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 import usePagination from "@mui/material/usePagination";
 
+import { styled } from "@mui/material/styles";
+
 import { PAGINATION_LABELS } from "./Labels";
 
 interface IPagination {
@@ -10,6 +12,12 @@ interface IPagination {
   page: number;
   handleChangePagination(e: React.ChangeEvent<unknown>, value: number): void;
 }
+
+const StyledBox = styled(Box)(() => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+}));
 
 export const Pagination = ({ count, page, handleChangePagination }: IPagination) => {
   const { items } = usePagination({
@@ -21,16 +29,7 @@ export const Pagination = ({ count, page, handleChangePagination }: IPagination)
   });
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        "& > *": {
-          m: 1,
-        },
-      }}
-    >
+    <StyledBox>
       <ButtonGroup variant="outlined" size="small" color="warning">
         {items.map(({ page, type, selected, ...item }, index) => {
           let children = null;
@@ -70,6 +69,6 @@ export const Pagination = ({ count, page, handleChangePagination }: IPagination)
           return children;
         })}
       </ButtonGroup>
-    </Box>
+    </StyledBox>
   );
 };

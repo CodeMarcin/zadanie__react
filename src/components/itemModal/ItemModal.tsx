@@ -1,15 +1,47 @@
-import { Grid } from "@mui/material";
-import { Typography } from "@mui/material";
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
-import { ITEM_MODAL_LABELS } from "./Labels";
 import { SitePortal } from "../sitePortal/SitePortal";
+
+import { Grid, Typography, Dialog } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { ITEM_MODAL_LABELS } from "./Labels";
 interface IItemModal {
   open: boolean;
   data: IItem;
   handleCloseModal(): void;
 }
+
+const StyledGridTop = styled(Grid)(({ theme }) => ({
+  columnGap: "20px",
+  flexWrap: "nowrap",
+  padding: "15px",
+  alignItems: "center",
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
+}));
+
+const StyledCloseIcon = styled(CloseIcon)(({ theme }) => ({
+  cursor: "pointer",
+  [theme.breakpoints.up("sm")]: {
+    display: "block",
+  },
+  [theme.breakpoints.down("sm")]: {
+    display: "none",
+  },
+}));
+
+const StyledCloseIconMobile = styled(CloseIcon)(({ theme }) => ({
+  cursor: "pointer",
+  [theme.breakpoints.up("sm")]: {
+    display: "none",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+    display: "block",
+  },
+}));
 
 export const ItemModal = ({ open, data, handleCloseModal }: IItemModal) => {
   const { id, name, color, pantone_value, year } = data;
@@ -35,9 +67,10 @@ export const ItemModal = ({ open, data, handleCloseModal }: IItemModal) => {
 
   return (
     <SitePortal>
-      <Dialog open={open} onClose={handleCloseModal} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+      <Dialog open={open} onClose={handleCloseModal}>
         <Grid container flexDirection="column">
-          <Grid item container columnGap="20px" flexWrap="nowrap" p="15px" alignItems="center">
+          <StyledGridTop item container>
+            <StyledCloseIconMobile onClick={handleCloseModal} />
             {topData.map((el) => (
               <Grid item container flexWrap="nowrap" alignItems="baseline" columnGap="5px" width="auto" key={el.label}>
                 <Typography variant="button" component="span" color="black" fontWeight="bold" textTransform="none">
@@ -48,8 +81,8 @@ export const ItemModal = ({ open, data, handleCloseModal }: IItemModal) => {
                 </Typography>
               </Grid>
             ))}
-            <CloseIcon onClick={handleCloseModal} sx={{ cursor: "pointer" }} />
-          </Grid>
+            <StyledCloseIcon onClick={handleCloseModal} />
+          </StyledGridTop>
           <Grid item container justifyContent="center" alignItems="center" sx={{ backgroundColor: color, minHeight: "100px" }}>
             <Typography variant="h6" component="span" color="white" fontWeight="bold">
               {color}

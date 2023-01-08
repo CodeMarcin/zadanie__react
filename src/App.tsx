@@ -4,16 +4,13 @@ import { useAppDispatch, useAppSelector } from "./store/hooks";
 
 import { fetchAndParseAllData, fetchAndParseItemByID, setShowModalItemID } from "./siteSlice/siteSlice";
 
-import { Container } from "@mui/system";
-
 import { SearchInput } from "./components/searchInput/SearchInput";
 import { ResultTable } from "./components/resultTable/ResultTable";
 import { Pagination } from "./components/pagination/Pagination";
 import { ItemModal } from "./components/itemModal/ItemModal";
-import { Typography } from "@mui/material";
-import { Grid } from "@mui/material";
-import { CssBaseline } from "@mui/material";
-import { GlobalStyles } from "@mui/material";
+
+import { GlobalStyles, CssBaseline, Grid } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const SEARCH_PARAMS = new URLSearchParams(document.location.search);
 const EXPECTED_URL_PARAMS_PAGE = "page";
@@ -39,6 +36,14 @@ const replaceURL = (type?: "id" | "page", value?: string | number) => {
   if (!value && !type) window.history.replaceState({}, document.title, cleanURL);
   else window.history.replaceState({}, document.title, `?${type}=${value}`);
 };
+
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  flexDirection: "column",
+  rowGap: "20px",
+  maxWidth: theme.breakpoints.values.md,
+  margin: "50px auto",
+  padding: "0 16px",
+}));
 
 export const App = () => {
   const [idFromURLAfterLoadSite, setIdFromURLAfterLoadSite] = useState<string | undefined>();
@@ -90,15 +95,14 @@ export const App = () => {
       <CssBaseline />
       <GlobalStyles styles={{ body: { backgroundColor: "#222831" } }} />
 
-      <Grid container direction="column" rowGap={"20px"} maxWidth={"md"} mx={"auto"} my={"50px"} px={"16px"}>
+      <StyledGrid container>
         {isFullyRendered && <SearchInput handleSearchInput={handleSearchInput} idFromURLAfterLoadSite={idFromURLAfterLoadSite} />}
         <ResultTable isDataLoading={site.isLoadingData} items={items} message={site.message} />
         {items.length > 1 && <Pagination count={pagination.total_pages} page={pagination.page} handleChangePagination={(e, value) => handleChangePagination(e, value)} />}
         {!!site.showModalItemID && (
-          <ItemModal open={!!site.showModalItemID} handleCloseModal={handleCloseModal} data={items.find((el) => el.id === site.showModalItemID)!}/ >
+          <ItemModal open={!!site.showModalItemID} handleCloseModal={handleCloseModal} data={items.find((el) => el.id === site.showModalItemID)!} />
         )}
-        {/* TO DO: Add Showing example: 5 of 12  */}
-      </Grid>
+      </StyledGrid>
     </>
   );
 };

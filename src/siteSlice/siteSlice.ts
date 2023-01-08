@@ -1,6 +1,8 @@
-import { createSlice, PayloadAction, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+
 import { getBasicDataAPI, getProductByIdAPI } from "../api/getDataApi";
-import { RootState } from "../store/store";
+
+import { SITE_SLICE_LABELS } from "./Labels";
 
 export const fetchAndParseAllData = createAsyncThunk("getDataFromAPI", async ({ page, perPage }: { page: number; perPage?: number }) => {
   try {
@@ -39,9 +41,6 @@ export const siteSlice = createSlice({
     setShowModalItemID: (state, action: PayloadAction<number>) => {
       state.site.showModalItemID = action.payload;
     },
-    // getSpeciyItemData: (state, action: PayloadAction<number>) => {
-    //   return state.items.find((el) => el.id === action.payload);
-    // },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAndParseAllData.pending, (state) => {
@@ -71,7 +70,7 @@ export const siteSlice = createSlice({
       };
     });
     builder.addCase(fetchAndParseItemByID.rejected, (state, action) => {
-      return { ...state, items: [], site: { ...state.site, isLoadingData: false, message: action.error.code !== "ERR_BAD_REQUEST" ? action.error.message! : null } };
+      return { ...state, items: [], site: { ...state.site, isLoadingData: false, message: action.error.message ?? SITE_SLICE_LABELS.UNKNOWN_ERROR } };
     });
   },
 });

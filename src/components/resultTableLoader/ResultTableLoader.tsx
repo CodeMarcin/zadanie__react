@@ -1,13 +1,22 @@
-import { Skeleton, TableCell, TableRow } from "@mui/material";
+import { TableCell, TableRow } from "@mui/material";
+
+import { SVGLoader } from "../../utilities/SVG";
+
+import { styled } from "@mui/material/styles";
+
+const StyledTableCell = styled(TableCell)(() => ({
+  borderBottom: "none",
+  padding: "0",
+}));
 
 export const ResultTableLoader = () => {
   return (
-    <TableRow>
-      <TableCell colSpan={3}>
-        {[...Array(5)].map((el, i) => (
-          <Skeleton key={i} variant="text" height={60} sx={{ margin: "10px 0 0", bgcolor: "#F2F7A1" }} />
-        ))}
-      </TableCell>
-    </TableRow>
+    <>
+      <TableRow>
+        <StyledTableCell colSpan={3}>
+          <SVGLoader />
+        </StyledTableCell>
+      </TableRow>
+    </>
   );
 };
