@@ -16,7 +16,10 @@ export const Pagination = ({ count, page, handleChangePagination }: IPagination)
     count,
     page,
     onChange: (e, page) => handleChangePagination(e, page),
+    hidePrevButton: page === 1,
+    hideNextButton: page === count,
   });
+
   return (
     <Box
       sx={{
@@ -28,7 +31,7 @@ export const Pagination = ({ count, page, handleChangePagination }: IPagination)
         },
       }}
     >
-      <ButtonGroup variant="contained" size="large">
+      <ButtonGroup variant="outlined" size="small" color="warning">
         {items.map(({ page, type, selected, ...item }, index) => {
           let children = null;
 

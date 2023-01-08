@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
+import { StyledPaperSearchInput } from "./Styles";
+import { Grid } from "@mui/material";
 
-import { Container, TextField } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 import { SEARCH_INPUT_LABELS } from "./Labels";
-import { Box } from "@mui/system";
+
+import { Paper } from "@mui/material";
+
+import { InputBase } from "@mui/material";
 
 interface ISearchInput {
   idFromURLAfterLoadSite: string | undefined;
@@ -27,15 +32,11 @@ export const SearchInput = ({ idFromURLAfterLoadSite, handleSearchInput }: ISear
   }, [idFromURLAfterLoadSite]);
 
   return (
-    <Box>
-      <TextField
-        sx={{ borderBottom: "2px solid #000" }}
-        label={SEARCH_INPUT_LABELS.SEARCH_INPUT_LABEL}
-        value={inputValue}
-        variant="standard"
-        fullWidth
-        onChange={handleInputChange}
-      />
-    </Box>
+    <Grid item>
+      <StyledPaperSearchInput >
+        <SearchIcon />
+        <InputBase sx={{ ml: 1, flex: 1 }} placeholder={SEARCH_INPUT_LABELS.SEARCH_INPUT_LABEL} value={inputValue} onChange={handleInputChange} />
+      </StyledPaperSearchInput>
+    </Grid>
   );
 };

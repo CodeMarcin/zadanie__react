@@ -1,6 +1,5 @@
-import { Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 
-import { Box } from "@mui/system";
 import { styled } from "@mui/material/styles";
 import { ResultTableItem } from "../resultTableItem/ResultTableItem";
 import { ResultTableLoader } from "../resultTableLoader/ResultTableLoader";
@@ -14,19 +13,20 @@ interface IResultTable {
   message: string | null;
 }
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-    fontWeight: "bold",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
+const StyledTable = styled(Table)(() => ({
+  borderCollapse: "unset",
+  borderSpacing: "0 15px",
 }));
 
-export const ResultTable = ({ isDataLoading, items, message }: IResultTable) => {
+const StyledTableCell = styled(TableCell)(() => ({
+  fontWeight: "bold",
+  color: "#fff",
+  border: "none",
+}));
 
+const TABLE_HEADER = [RESULT_TABLE_LABELS.ID, RESULT_TABLE_LABELS.NAME, RESULT_TABLE_LABELS.YEAR];
+
+export const ResultTable = ({ isDataLoading, items, message }: IResultTable) => {
   const getContent = () => {
     if (isDataLoading) return <ResultTableLoader />;
     else if (items.length) return items.map((el) => <ResultTableItem key={el.id} id={el.id} color={el.color} name={el.name} year={el.year} />);
@@ -35,25 +35,19 @@ export const ResultTable = ({ isDataLoading, items, message }: IResultTable) => 
   };
 
   return (
-    <Box>
-      <TableContainer sx={{ minHeight: "322px" }} component={Paper}>
-        <Table>
+    <Grid item sx={{ padding: "0 25px" }}>
+      <TableContainer>
+        <StyledTable>
           <TableHead>
             <TableRow>
-              <StyledTableCell>{RESULT_TABLE_LABELS.ID}</StyledTableCell>
-              <StyledTableCell>{RESULT_TABLE_LABELS.NAME}</StyledTableCell>
-              <StyledTableCell>{RESULT_TABLE_LABELS.YEAR}</StyledTableCell>
+              {TABLE_HEADER.map((el) => (
+                <StyledTableCell key={el}>{el}</StyledTableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>{getContent()}</TableBody>
-        </Table>
+        </StyledTable>
       </TableContainer>
-    </Box>
+    </Grid>
   );
 };
-
-//   <TableBody>
-//     {selector.fromApi.data.map((el) => (
-
-//     ))}
-//   </TableBody>;

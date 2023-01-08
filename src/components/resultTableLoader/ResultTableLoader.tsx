@@ -4,7 +4,9 @@ export const ResultTableLoader = () => {
   return (
     <TableRow>
       <TableCell colSpan={3}>
-        <Skeleton variant="rounded" height={60} sx={{ margin: "10px 0 0" }} />
+        {[...Array(5)].map((el, i) => (
+          <Skeleton key={i} variant="text" height={60} sx={{ margin: "10px 0 0", bgcolor: "#F2F7A1" }} />
+        ))}
       </TableCell>
     </TableRow>
   );
