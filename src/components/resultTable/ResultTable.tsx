@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 import { ResultTableItem } from "../resultTableItem/ResultTableItem";
 import { ResultTableLoader } from "../resultTableLoader/ResultTableLoader";
 import { ResultTableMessage } from "../resultTableMessage/ResultTableMessage";
@@ -32,12 +34,12 @@ const StyledTableCell = styled(TableCell)(() => ({
 const TABLE_HEADER = [RESULT_TABLE_LABELS.ID, RESULT_TABLE_LABELS.NAME, RESULT_TABLE_LABELS.YEAR];
 
 export const ResultTable = ({ isDataLoading, items, message }: IResultTable) => {
-  const getContent = () => {
+  const getContent = useCallback(() => {
     if (isDataLoading) return <ResultTableLoader />;
     else if (items.length) return items.map((el) => <ResultTableItem key={el.id} id={el.id} color={el.color} name={el.name} year={el.year} />);
     else if (!items.length && !message) return <ResultTableMessage type="MESSAGE" message={RESULT_TABLE_LABELS.NO_DATA_TO_DISPLAY} />;
     else return <ResultTableMessage type="ERROR" message={message ?? null} />;
-  };
+  }, [isDataLoading, items, message]);
 
   return (
     <StyledGrid item>

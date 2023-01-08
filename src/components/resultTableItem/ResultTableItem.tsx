@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 import { useAppDispatch } from "../../store/hooks";
 
 import { setShowModalItemID } from "../../siteSlice/siteSlice";
@@ -35,8 +37,12 @@ export const ResultTableItem = ({ id, color, name, year }: IResultTableItem) => 
     transition: theme.transitions.create(["color"], { duration: "0.5s" }),
   }));
 
+  const handleClickItem = useCallback(() => {
+    dispatch(setShowModalItemID(id));
+  }, [dispatch, id]);
+
   return (
-    <StyledTableRow onClick={() => dispatch(setShowModalItemID(id))} tabIndex={0}>
+    <StyledTableRow onClick={handleClickItem} tabIndex={0}>
       <StyledTableCell>{id}</StyledTableCell>
       <StyledTableCell>{useFirstLetterToUppercase(name)}</StyledTableCell>
       <StyledTableCell>{year}</StyledTableCell>
